@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: staging
+    database: de-zoomcamp-411910
+     # For postgres:
+      #database: production
+    schema: match_sequence_dataset
+      # loaded_at_field: record_loaded_at
+    tables:
+      - name: match_sequence_table
+      - name: match_sequence_table__event_ids
+         # freshness:
+           # error_after: {count: 6, period: hour}

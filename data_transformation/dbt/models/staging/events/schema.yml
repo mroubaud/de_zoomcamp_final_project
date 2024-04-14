@@ -1,0 +1,176 @@
+version: 2
+
+sources:
+  - name: staging
+    database: de-zoomcamp-411910
+     # For postgres:
+      #database: production
+    schema: match_events_dataset
+      # loaded_at_field: record_loaded_at
+    tables:
+      - name: match_events_table
+      - name: match_events_table__event_types
+         # freshness:
+           # error_after: {count: 6, period: hour}
+    
+models:
+  - name: stg-match-events
+    description: "Parent table with all the events of all the matches of the football world cup Qatar 2022."
+    columns:
+      - name: id
+        data_type: int64
+        description: "id of the event."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: event_period
+        data_type: string
+        description: "Period of the game where the events happened (ej: 'FIRST HALF')."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: event_time
+        data_type: int64
+        description: "Time (in miliseconds) of the match when the event happened."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: match_id
+        data_type: int64
+        description: "Unique id of the match where the event happened."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: team_id
+        data_type: int64
+        description: "Unique id of the team which perform the event."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: player_id
+        data_type: int64
+        description: "Unique id of the player which perform the event."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: x
+        data_type: float64
+        description: "x coordinate of the football pitch where the event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: y
+        data_type: float64
+        description: "y coordinate of the football pitch where the event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+
+      - name: relative_event__id
+        data_type: int64
+        description: "Id of the relative event associated with the main event. If there is no relative event, this field will remain 'NULL'."
+
+      - name: relative_event__event_time
+        data_type: int64
+        description: "Time (in milisecods) when the relative event happened."
+
+      - name: relative_event__player_id
+        data_type: int64
+        description: "Id of the player who perform the relative event."
+
+      - name: relative_event__x
+        data_type: float64
+        description: "x coordinate of the football pitch where the relative event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+
+      - name: relative_event__y
+        data_type: float64
+        description: "y coordinate of the football pitch where the relative event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+
+      - name: _dlt_load_id
+        data_type: string
+        description: "dlt unique load id assigned to the event row."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: _dlt_id
+        data_type: string
+        description: "dlt unique id assigned to the event row."
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: ball_position__x
+        data_type: float64
+        description: "x coordinate of the football pitch where ball was when the event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+
+      - name: ball_position__y
+        data_type: float64
+        description: "y coordinate of the football pitch where ball was when the event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+
+      - name: xg
+        data_type: float64
+        description: "If the event is a shoot, it gives the xG value of if calculated with Bepro algorithm."
+
+  - name: stg-match-event-types
+    description: "Child table with the information about the event."
+    columns:
+      - name: event_type
+        data_type: string
+        description: "Type of event based on FIFA Football Lenguage. Documentation: https://www.notion.so/bepro/Bepro-Event-Definitions-4eea4fc9538e485ca02842e88f81072c."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: outcome
+        data_type: string
+        description: "Outcome of the event. Documentation: https://www.notion.so/bepro/Bepro-Event-Definitions-4eea4fc9538e485ca02842e88f81072c."
+            
+      - name: cross
+        data_type: boolean
+        description: "If the event was a 'pass' and a 'cross', this field takes the 'TRUE' value."
+
+      - name: key_pass
+        data_type: boolean
+        description: "If the event was a 'pass' and a 'key_pass', this field takes the 'TRUE' value."
+
+      - name: assist
+        data_type: boolean
+        description: "If the event was a 'pass' and an a 'assist', this field takes the 'TRUE' value."
+
+      - name: _dlt_parent_id
+        data_type: string
+        description: "dlt reference to the parent table element id."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: _dlt_list_idx
+        data_type: int64
+        description: "ldt index value of the child table in ldt. In this case, if there is more than one event_type for an event, each index is associated with an event_type (child) of the event (parent)."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: _dlt_id
+        data_type: string
+        description: "Unique ldt id from child table (event_type)."
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: sub_event_type
+        data_type: string
+        description: "Sub event type of the event. An event could not have a sub event type, in these case, the value of this fiels will be 'NULL'."
+
+      - name: body_part
+        data_type: string
+        description: "If the event is a shoot, it takes the part of the body used to perform it."

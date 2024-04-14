@@ -1,0 +1,27 @@
+select 
+    id as event_id,
+    event_period,
+    event_time,
+    match_id,
+    team_id,
+    player_id,
+    x,
+    y,
+    relative_event__id,
+    relative_event__event_time,
+    relative_event__player_id,
+    relative_event__x,
+    relative_event__y,
+    ball_position__x,
+    ball_position__y,
+    xg,
+    _dlt_id,
+    _dlt_load_id,
+    {{ get_event_min("event_time","event_period") }} as event_min,
+    {{ get_event_min("relative_event__event_time","event_period") }} as relative_event__event_min,
+    {{ get_pass_distance("x", "y", "relative_event__x", "relative_event__y") }} as pass_distance,
+    {{ get_event_zone("x", "y") }} as event_zone,
+    {{ get_event_zone_destination("relative_event__x", "relative_event__y") }} as event_zone_destination,
+from {{ ref('stg-match-events') }}
+
+   

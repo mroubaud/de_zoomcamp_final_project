@@ -1,0 +1,1145 @@
+version: 2
+
+models:
+  - name: players
+    description: "Table with the info of all the players that played the tournament."
+    columns:
+      - name: player_id
+        data_type: int64
+        description: "Unique identifier of a player."
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: player_name
+        data_type: string
+        description: "First name of the player."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: player_last_name
+        data_type: string
+        description: "Last name of the player."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: player_full_name
+        data_type: string
+        description: "Full name of the player."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: back_number
+        data_type: int64
+        description: "Shirt number of the player."
+
+      - name: main_position
+        data_type: string
+        description: "Position in the field of the player."
+
+      - name: team_id
+        data_type: int64
+        description: "Id of the team the player plays for."
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: matches
+    description: "Table with the information of all the matches played during the tournament."
+    columns:
+      - name: match_id
+        data_type: int64
+        description: "Unique identifier of the match."
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn     
+
+      - name: start_time
+        data_type: string
+        description: "Match date and start time (local time)."
+
+      - name: home_team__id
+        data_type: int64
+        description: "Id of the home team."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: home_team_name
+        data_type: string
+        description: "Name of the home team."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: away_team__id
+        data_type: int64
+        description: "Id of the away team."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: away_team_name
+        data_type: string
+        description: "Name of the away team."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: home_team_score
+        data_type: int64
+        description: "Final score of the match for the home team."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: away_team_score
+        data_type: int64
+        description: "Final score of the match for the away team."
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: fact_events
+    description: "Table with the full information of all the matches, teams, players and events of the tournament."
+    columns:
+      - name: event_id
+        data_type: int64
+        description: "Unique id of the parent event."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: event_period
+        data_type: string
+        description: "Period of the game where the events happened (ej: 'FIRST HALF')."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: event_time
+        data_type: int64
+        description: "Time (in miliseconds) of the match when the event happened."
+        tests:
+          - not_null:
+              severity: warn
+            
+      - name: event_min
+        data_type: int64
+        description: "Time (in minutes) of the match when the event happened."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: match_id
+        data_type: int64
+        description: "Unique id of the match where the event happened."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: team_id
+        data_type: int64
+        description: "Unique id of the team which perform the event."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: player_id
+        data_type: int64
+        description: "Unique id of the player which perform the event."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: x
+        data_type: float64
+        description: "x coordinate of the football pitch where the event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: y
+        data_type: float64
+        description: "y coordinate of the football pitch where the event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: relative_event__id
+        data_type: int64
+        description: "Id of the relative event associated with the main event. If there is no relative event, this field will remain 'NULL'."
+
+      - name: relative_event__event_time
+        data_type: int64
+        description: "Time (in milisecods) when the relative event happened." 
+
+      - name: relative_event__event_min
+        data_type: int64
+        description: "Time (in minutes) of the match when the relative event happened."
+
+      - name: relative_event__player_id
+        data_type: int64
+        description: "Id of the player who perform the relative event."
+
+      - name: relative_event__x
+        data_type: float64
+        description: "x coordinate of the football pitch where the relative event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+
+      - name: relative_event__y
+        data_type: float64
+        description: "y coordinate of the football pitch where the relative event happened. Documentation: https://bepro.notion.site/Bepro-Data-API-Guidebook-32f413691e8546f587a98c59d8b426e3."
+
+      - name: xg
+        data_type: float64
+        description: "If the event is a shoot, it gives the xG value of if calculated with Bepro algorithm."
+
+      - name: event_zone
+        data_type: float64
+        description: "Zone of the pitch (18 zones) where the event happened."      
+        tests:
+          - not_null:
+              severity: warn
+      - name: event_zone_destination
+        data_type: float64
+        description: "Zone of the pitch (18 zones) where the event finished. Only 'Pass' events has this value as not empty."  
+
+      - name: event_type
+        data_type: string
+        description: "Type of event based on FIFA Football Lenguage. Documentation: https://www.notion.so/bepro/Bepro-Event-Definitions-4eea4fc9538e485ca02842e88f81072c."
+
+      - name: outcome
+        data_type: string
+        description: "Outcome of the event. Documentation: https://www.notion.so/bepro/Bepro-Event-Definitions-4eea4fc9538e485ca02842e88f81072c."
+
+      - name: cross
+        data_type: boolean
+        description: "If the event was a 'pass' and a 'cross', this field takes the 'TRUE' value."
+
+      - name: key_pass
+        data_type: boolean
+        description: "If the event was a 'pass' and a 'key_pass', this field takes the 'TRUE' value."
+
+      - name: assist
+        data_type: boolean
+        description: "If the event was a 'pass' and an a 'assist', this field takes the 'TRUE' value."
+
+      - name: sub_event_type
+        data_type: string
+        description: "Sub event type of the event. An event could not have a sub event type, in these case, the value of this fiels will be 'NULL'."
+
+      - name: body_part
+        data_type: string
+        description: "If the event is a shoot, it takes the part of the body used to perform it."
+      
+      - name: _dlt_id
+        data_type: int64
+        description: "Unique ldt id from child table (event_type)."     
+        tests:
+          - not_null:
+              severity: warn        
+      
+      - name: _dlt_parent_id
+        data_type: string
+        description: "ldt id of the parent table event (event)."    
+            
+      - name: _dlt_list_idx
+        data_type: int64
+        description: "ldt index value of the child table in ldt. In this case, if there is more than one event_type for an event, each index is associated with an event_type (child) of the event (parent)."   
+        tests:
+          - not_null:
+              severity: warn
+              
+      - name: player_full_name
+        data_type: string
+        description: "Full name of the player."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: back_number
+        data_type: int64
+        description: "Shirt number of the player who's perform the event."
+
+      - name: main_position
+        data_type: string
+        description: "Position in the field of the player who's perform the event."
+
+  - name: teams
+    description: "Table with the information of all the teams that played the football world cup of Qatar 2022."
+    columns:
+      - name: team_id
+        data_type: int64
+        description: "Unique identifier of the team."
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+
+      - name: team_name
+        data_type: string
+        description: "Name of the team."
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: fact_team_stats
+    description: "Table with all the accumulated stats of the team form all the matches of the tournament."
+    columns:
+      - name: team_id
+        data_type: int64
+        description: "Unique identifier of the team."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: stats__goal
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__total_shot
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_on_target
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_off_target
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_blocked
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_in_pa
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_outside_of_pa
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__free_kick
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__corner_kick
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__throw_in
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__penalty_kick
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__pass_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__assist
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__key_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__control_under_pressure
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__cross
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__cross_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__final_third_area_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__final_third_area_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__middle_area_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__middle_area_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_area_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_area_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__short_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__short_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__medium_range_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__medium_range_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__long_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__long_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__forward_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__forward_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__backward_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__backward_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__sideways_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__sideways_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__tackle
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__tackle_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_duel
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_duel_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_duel_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__ground_duel
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__ground_duel_succeeded
+        data_type: int64
+        description: Refer to Bepro event definition glossary.""
+
+      - name: stats__ground_duel_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__loose_ball_duel
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__loose_ball_duel_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__loose_ball_duel_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__intercept
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__clearance
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__recovery
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__intervention
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__take_on
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__take_on_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__mistake
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__block
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__foul
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__foul_won
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__offside
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__yellow_card
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__red_card
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__own_goal
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__goal_conceded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__goal_kick
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__goal_kick_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_clearance
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_clearance_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_clearance_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_line_support
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_line_support_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_line_support_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__save_by_catching
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__possession
+        data_type: float64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: match_id
+        data_type: int64
+        description: "Id if the match where the team perform the stats."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: _dlt_id
+        data_type: string
+        description: "dlt unique id of the row."
+        tests:
+          - not_null:
+              severity: warn
+          - unique:
+              severity: warn
+
+      - name: team_name
+        data_type: string
+        description: "Name of the team which peform the stats"
+  
+  - name: fact_players_stats
+    description: "Table with the stats of all the players for each match of the tournament"
+    columns:
+      - name: _dlt_id
+        data_type: string
+        description: "Unique id of the dlt table"
+        tests:
+          - unique:
+              severity: warn
+          - not_null:
+              severity: warn
+              
+      - name: player_id
+        data_type: int64
+        description: "Unique identifier of the player."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: stats__goal
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__total_shot
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_on_target
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_off_target
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_blocked
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_in_pa
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__shot_outside_of_pa
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__free_kick
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__corner_kick
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__throw_in
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__penalty_kick
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__pass_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__assist
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__key_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__control_under_pressure
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__cross
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__cross_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__final_third_area_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__final_third_area_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__middle_area_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__middle_area_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_area_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_area_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__short_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__medium_range_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__medium_range_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__long_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__long_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__forward_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__forward_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__backward_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__backward_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__sideways_pass
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__sideways_pass_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__tackle
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__tackle_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_duel
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_duel_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_duel_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__ground_duel
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__ground_duel_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__ground_duel_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__loose_ball_duel
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__loose_ball_duel_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__loose_ball_duel_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__intercept
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__clearance
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__recovery
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__intervention
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__take_on
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__take_on_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__mistake
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__block
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__foul
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__foul_won
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__offside
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__yellow_card
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__red_card
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__own_goal
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__goal_conceded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__goal_kick
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__goal_kick_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_clearance
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_clearance_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__aerial_clearance_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_line_support
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_line_support_succeeded
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__defensive_line_support_failed
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__save_by_catching
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__save_by_punching
+        data_type: int64
+        description: "Refer to Bepro event definition glossary."
+
+      - name: stats__rating
+        data_type: float64
+        description: "Bepro rating of the player in the match."
+
+      - name: stats__play_time
+        data_type: int64
+        description: "Amount of minutes played by the player in the match."
+
+      - name: team_id
+        data_type: int64
+        description: "Unique id of the team which the player plays for."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: match_id
+        data_type: int64
+        description: "Unique identifier of the match where the player perform the stats."
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: player_full_name
+        data_type: string
+        description: "Full name of the player."
+
+      - name: main_position
+        data_type: string
+        description: "Position of the player."
+
+      - name: team_name
+        data_type: string
+        description: "Name of the team which the player play for during the match."
+
+
+  - name: fact_match_events
+    description: "Table with the information of the events (Bepro eveniting) of a match."
+    columns:
+      - name: event_id
+        data_type: int64
+        description: ""
+
+      - name: event_period
+        data_type: string
+        description: ""
+
+      - name: event_time
+        data_type: int64
+        description: ""
+
+      - name: match_id
+        data_type: int64
+        description: ""
+
+      - name: team_id
+        data_type: int64
+        description: ""
+
+      - name: player_id
+        data_type: int64
+        description: ""
+
+      - name: x
+        data_type: float64
+        description: ""
+
+      - name: y
+        data_type: float64
+        description: ""
+
+      - name: relative_event__id
+        data_type: int64
+        description: ""
+
+      - name: relative_event__event_time
+        data_type: int64
+        description: ""
+
+      - name: relative_event__player_id
+        data_type: int64
+        description: ""
+
+      - name: relative_event__x
+        data_type: float64
+        description: ""
+
+      - name: relative_event__y
+        data_type: float64
+        description: ""
+
+      - name: ball_position__x
+        data_type: float64
+        description: ""
+
+      - name: ball_position__y
+        data_type: float64
+        description: ""
+
+      - name: xg
+        data_type: float64
+        description: ""
+
+      - name: _dlt_id
+        data_type: string
+        description: ""
+
+      - name: _dlt_load_id
+        data_type: string
+        description: ""
+
+      - name: event_min
+        data_type: float64
+        description: ""
+
+      - name: relative_event__event_min
+        data_type: float64
+        description: ""
+
+      - name: pass_distance
+        data_type: float64
+        description: ""
+
+      - name: event_zone
+        data_type: string
+        description: ""
+
+      - name: event_zone_destination
+        data_type: string
+        description: ""
+
+  - name: fact_match_event_types
+    description: "Table with the information of the events types of each event, it's a child table of fact_match_events."
+    columns:
+      - name: event_type
+        data_type: string
+        description: "Type of event occured. See Bepro eventing glossary for more information."
+
+      - name: outcome
+        data_type: string
+        description: "Outcome of event occured. See Bepro eventing glossary for more information."
+
+      - name: cross
+        data_type: boolean
+        description: "See Bepro eventing glossary information."
+
+      - name: key_pass
+        data_type: boolean
+        description: "See Bepro eventing glossary information."
+
+      - name: assist
+        data_type: boolean
+        description: "See Bepro eventing glossary information."
+
+      - name: _dlt_parent_id
+        data_type: string
+        description: "dlt id of the element in the parent table, in this case, the event."
+
+      - name: _dlt_list_idx
+        data_type: int64
+        description: "dlt index identifier indicating the child number of the element in relation to the parent table."
+
+      - name: _dlt_id
+        data_type: string
+        description: "unique dlt id identifier of the element"
+
+      - name: sub_event_type
+        data_type: string
+        description: "Sub event type (if corresponse) of the event. See Bepro eventing glossary information."
+
+      - name: body_part
+        data_type: string
+        description: "See Bepro eventing glossary information."
+
+  - name: fact_sequence
+    description: "Table with the information of each sequence of each match of the tournament."
+    columns:
+      - name: sequence_id
+        data_type: int64
+        description: "Unique id of the sequence."
+
+      - name: start_time
+        data_type: int64
+        description: "Sequence start time."
+
+      - name: end_time
+        data_type: int64
+        description: "Sequence end time."
+
+      - name: event_period
+        data_type: string
+        description: "Event period of the match when the sequence happened."
+
+      - name: match_id
+        data_type: int64
+        description: "Unique id of the match where the sequence happened."
+
+      - name: team_id
+        data_type: int64
+        description: "Unique id of the team which perform the sequence."
+
+      - name: _dlt_id
+        data_type: string
+        description: "Unique dlt identifier of the element."
+
+
+  - name: fact_sequence_values
+    description: "Child table of the fact_sequence table. It contains each event id value of each sequence."
+    columns:
+      - name: _dlt_list_idx
+        data_type: int64
+        description: "index of the "
+
+      - name: _dlt_id
+        data_type: string
+        description: "Unique dlt identifier of the element."
+
+      - name: _dlt_parent_id
+        data_type: string
+        description: "dlt id of the element in the parent table, in this case, the sequence."
+
+      - name: value
+        data_type: int64
+        description: "dlt index identifier indicating the child number of the element in relation to the parent table."

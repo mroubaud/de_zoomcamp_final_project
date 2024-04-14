@@ -1,0 +1,372 @@
+version: 2
+
+sources:
+  - name: staging
+    database: de-zoomcamp-411910
+     # For postgres:
+      #database: production
+    schema: match_players_stats_dataset
+      # loaded_at_field: record_loaded_at
+    tables:
+      - name: match_players_stats_table
+      - name: match_players_stats_table__players
+
+         # freshness:
+           # error_after: {count: 6, period: hour}
+    
+models:
+  - name: stg-players-stats-info
+    description: ""
+    columns:
+      - name: player_id
+        data_type: int64
+        description: ""
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: stats__goal
+        data_type: int64
+        description: ""
+
+      - name: stats__total_shot
+        data_type: int64
+        description: ""
+
+      - name: stats__shot_on_target
+        data_type: int64
+        description: ""
+
+      - name: stats__shot_off_target
+        data_type: int64
+        description: ""
+
+      - name: stats__shot_blocked
+        data_type: int64
+        description: ""
+
+      - name: stats__shot_in_pa
+        data_type: int64
+        description: ""
+
+      - name: stats__shot_outside_of_pa
+        data_type: int64
+        description: ""
+
+      - name: stats__free_kick
+        data_type: int64
+        description: ""
+
+      - name: stats__corner_kick
+        data_type: int64
+        description: ""
+
+      - name: stats__throw_in
+        data_type: int64
+        description: ""
+
+      - name: stats__penalty_kick
+        data_type: int64
+        description: ""
+
+      - name: stats__pass
+        data_type: int64
+        description: ""
+
+      - name: stats__pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__pass_failed
+        data_type: int64
+        description: ""
+
+      - name: stats__assist
+        data_type: int64
+        description: ""
+
+      - name: stats__key_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__control_under_pressure
+        data_type: int64
+        description: ""
+
+      - name: stats__cross
+        data_type: int64
+        description: ""
+
+      - name: stats__cross_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__final_third_area_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__final_third_area_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__middle_area_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__middle_area_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__defensive_area_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__defensive_area_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__short_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__short_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__medium_range_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__medium_range_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__long_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__long_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__forward_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__forward_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__backward_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__backward_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__sideways_pass
+        data_type: int64
+        description: ""
+
+      - name: stats__sideways_pass_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__tackle
+        data_type: int64
+        description: ""
+
+      - name: stats__tackle_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__aerial_duel
+        data_type: int64
+        description: ""
+
+      - name: stats__aerial_duel_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__aerial_duel_failed
+        data_type: int64
+        description: ""
+
+      - name: stats__ground_duel
+        data_type: int64
+        description: ""
+
+      - name: stats__ground_duel_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__ground_duel_failed
+        data_type: int64
+        description: ""
+
+      - name: stats__loose_ball_duel
+        data_type: int64
+        description: ""
+
+      - name: stats__loose_ball_duel_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__loose_ball_duel_failed
+        data_type: int64
+        description: ""
+
+      - name: stats__intercept
+        data_type: int64
+        description: ""
+
+      - name: stats__clearance
+        data_type: int64
+        description: ""
+
+      - name: stats__recovery
+        data_type: int64
+        description: ""
+
+      - name: stats__intervention
+        data_type: int64
+        description: ""
+
+      - name: stats__take_on
+        data_type: int64
+        description: ""
+
+      - name: stats__take_on_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__mistake
+        data_type: int64
+        description: ""
+
+      - name: stats__block
+        data_type: int64
+        description: ""
+
+      - name: stats__foul
+        data_type: int64
+        description: ""
+
+      - name: stats__foul_won
+        data_type: int64
+        description: ""
+
+      - name: stats__offside
+        data_type: int64
+        description: ""
+
+      - name: stats__yellow_card
+        data_type: int64
+        description: ""
+
+      - name: stats__red_card
+        data_type: int64
+        description: ""
+
+      - name: stats__own_goal
+        data_type: int64
+        description: ""
+
+      - name: stats__goal_conceded
+        data_type: int64
+        description: ""
+
+      - name: stats__goal_kick
+        data_type: int64
+        description: ""
+
+      - name: stats__goal_kick_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__aerial_clearance
+        data_type: int64
+        description: ""
+
+      - name: stats__aerial_clearance_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__aerial_clearance_failed
+        data_type: int64
+        description: ""
+
+      - name: stats__defensive_line_support
+        data_type: int64
+        description: ""
+
+      - name: stats__defensive_line_support_succeeded
+        data_type: int64
+        description: ""
+
+      - name: stats__defensive_line_support_failed
+        data_type: int64
+        description: ""
+
+      - name: stats__save_by_catching
+        data_type: int64
+        description: ""
+
+      - name: stats__save_by_punching
+        data_type: int64
+        description: ""
+
+      - name: stats__rating
+        data_type: float64
+        description: ""
+
+      - name: stats__play_time
+        data_type: int64
+        description: ""
+
+      - name: _dlt_parent_id
+        data_type: string
+        description: ""
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: _dlt_list_idx
+        data_type: int64
+        description: ""
+
+      - name: _dlt_id
+        data_type: string
+        description: ""
+        tests:
+          - not_null:
+              severity: warn
+
+  - name: stg-players-stats
+    description: ""
+    columns:
+      - name: team_id
+        data_type: int64
+        description: ""
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: match_id
+        data_type: int64
+        description: ""
+        tests:
+          - not_null:
+              severity: warn
+
+      - name: _dlt_load_id
+        data_type: string
+        description: ""
+
+      - name: _dlt_id
+        data_type: string
+        description: ""
+        tests:
+          - not_null:
+              severity: warn
