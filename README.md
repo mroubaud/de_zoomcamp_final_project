@@ -4,7 +4,7 @@
 
 ### Problem Description
 
-In professional football, the provided from analyse data is playing an important rol these days. Have the chance to get insights and meaningful information from our players and team can make the difference between winning and loosing.
+In professional football, the data is playing an important rol these days. Have the chance to get insights and meaningful information from our players and team can make the difference between winning and loosing.
 In this project, we gonna analyse the data of the World Cup of Qatar 2022. All the data used in this project is provided be Bepro through its API.
 Our main goal is to analyse the data and try to find valuable information about the teams and or players that participate in the tournament, in order to arrive to usefull conclusions.
 
@@ -37,7 +37,7 @@ The data is stored in Google Big Query in the form of SQL tables.
 
 ### Data Transformations: dbt
 
-In order to clean and transform the data and also create new metrics, dbt was used. All the dbt files used in the project are included in the folder called _data_transformation_. The main advantage of using _dbt_ are:
+In order to clean and transform the data and also create new metrics, dbt was used. All the _dbt_ files used in the project are included in the folder called _data_transformation_. The main advantage of using _dbt_ are:
 
 - Easy integration with Google Big Query and Github using best programming practice (CI-CD).
 - Can perform test in our data to check that everything it's ok before uploading it to the storage.
