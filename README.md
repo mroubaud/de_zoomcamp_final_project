@@ -29,7 +29,7 @@ Bepro analyzed all the matches of the world cup of Qatar 2022 and it provides al
 
 ### Data Ingestion: Batch Processing with dlt
 
-Data Ingestion process was made through a python script called _data_ingestion.py_ inside the _data_ingestion_ folder.This script use _dlt_ to convert the response of the Bepro API from JSON to tabular format. Tables are store in Google Big Query in SQL format. Another advantage to use dlt is that it use the concept of _generator_, which allows to process the data in a more efficient way (_"line by line"_), without the need to use a lot of memory resources.
+Data Ingestion process was made through a python script called _data_ingestion.py_ inside the _data_ingestion_ folder.This script use _dlt_ to convert the response of the Bepro API from JSON to tabular format. Tables are store in Google Big Query in SQL format. Another advantage to use _dlt_ is that it use the concept of _generator_, which allows to process the data in a more efficient way (_"line by line"_), without the need to use a lot of memory.
 
 ### Data warehouse: Google Big Query
 
@@ -37,11 +37,11 @@ The data is stored in Google Big Query in the form of SQL tables.
 
 ### Data Transformations: dbt
 
-In order to clean and transform the data and also create new metrics, dbt was used. All the _dbt_ files used in the project are included in the folder called _data_transformation_. The main advantage of using _dbt_ are:
+In order to clean and transform the data and also create new metrics, _dbt_ was used. All the _dbt_ files used in the project are included in the folder called _data_transformation_. The main advantage of using _dbt_ are:
 
 - Easy integration with Google Big Query and Github using best programming practice (CI-CD).
 - Can perform test in our data to check that everything it's ok before uploading it to the storage.
-- Its provide a function to create documentation for the proyect in an easy way.
+- Its provide a function to create documentation for the proyect.
 
 ### Dashboards: Tableau
 
